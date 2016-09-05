@@ -33,6 +33,10 @@ dependencies {
     compile "javax.servlet:javax.servlet-api:3.1.0"
     compile "jstl:jstl:1.2"
 
+    compile "org.apache.tiles:tiles-core:3.0.5"
+    compile "org.apache.tiles:tiles-jsp:3.0.5"
+
+
 
     testCompile "junit:junit:4.12"
 }

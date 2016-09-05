@@ -5,20 +5,31 @@
 >
     <jsp:directive.page contentType="text/html;charset = UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
+    <spring:message code="label_contact_first_name" var="firstName"/>
+    <spring:message code="label_contact_last_name" var="lastName"/>
+    <spring:message code="label_contact_birth_date" var="birthDate"/>
+    <spring:message code="date_format_pattern" var="dateFormat"/>
+    <spring:message code="label_contact_list" var="contactListLabel"/>
 
     <html>
-    <head><title>Contacts</title></head>
+    <head>
+        <spring:theme code="styleSheet" var="app_css"/>
+        <spring:url value="/${app_css}" var="app_css_url"/>
+        <link rel="stylesheet" type="text/css" media="screen"
+              href="${app_css_url}"/>
+        <title>${contactListLabel}</title>
+    </head>
     <body>
     <div>
 
-        <h1><spring:message code="label_contact_list"/></h1>
+        <h1>${contactListLabel}</h1>
         <c:if test="${not empty contacts}">
             <table border="1">
                 <thead>
                 <tr>
-                    <th><spring:message code="label_contact_first_name"/></th>
-                    <th><spring:message code="label_contact_last_name"/></th>
-                    <th><spring:message code="label_contact_birth_date"/></th>
+                    <th>${firstName}</th>
+                    <th>${lastName}</th>
+                    <th>${birthDate}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,7 +38,7 @@
                         <td>${contact.firstName}</td>
                         <td>${contact.lastName}</td>
                         <td><joda:format value="${contact.birthDate}"
-                                         pattern="yyyy-MM-dd"/></td>
+                                         pattern="${dateFormat}"/></td>
                     </tr>
                 </c:forEach>
                 </tbody>

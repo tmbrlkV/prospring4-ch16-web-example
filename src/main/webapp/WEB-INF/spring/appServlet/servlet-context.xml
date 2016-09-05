@@ -24,10 +24,17 @@
         </property>
     </bean>
 
+    <bean class="org.springframework.ui.context.support.ResourceBundleThemeSource"
+          id="themeSource"/>
+
     <mvc:interceptors>
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"
               p:paramName="lang"/>
+        <bean class="org.springframework.web.servlet.theme.ThemeChangeInterceptor"/>
     </mvc:interceptors>
+
+    <bean class="org.springframework.web.servlet.theme.CookieThemeResolver"
+          id="themeResolver" p:cookieName="theme" p:defaultThemeName="standard"/>
 
     <bean class="org.springframework.web.servlet.i18n.CookieLocaleResolver"
           id="localeResolver" p:cookieName="locale"/>
