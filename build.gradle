@@ -36,6 +36,9 @@ dependencies {
     compile "org.apache.tiles:tiles-core:3.0.5"
     compile "org.apache.tiles:tiles-jsp:3.0.5"
 
+    compile "javax.validation:validation-api:1.1.0.Final"
+    compile "org.hibernate:hibernate-validator:5.2.4.Final"
+
 
 
     testCompile "junit:junit:4.12"

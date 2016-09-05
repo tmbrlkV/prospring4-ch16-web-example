@@ -1,50 +1,37 @@
-<?xml version = "1.0" encoding="UTF-8" standalone = "no"?>
-<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.0"
-          xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:joda="http://www.joda.org/joda/time/tags"
-          xmlns:spring="http://www.springframework.org/tags"
->
-    <jsp:directive.page contentType="text/html;charset = UTF-8"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page"
+     xmlns:spring="http://www.springframework.org/tags"
+     version="2.0" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:joda="http://www.joda.org/joda/time/tags">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
-    <spring:message code="label_contact_first_name" var="firstName"/>
-    <spring:message code="label_contact_last_name" var="lastName"/>
-    <spring:message code="label_contact_birth_date" var="birthDate"/>
-    <spring:message code="date_format_pattern" var="dateFormat"/>
-    <spring:message code="label_contact_list" var="contactListLabel"/>
 
-    <html>
-    <head>
-        <spring:theme code="styleSheet" var="app_css"/>
-        <spring:url value="/${app_css}" var="app_css_url"/>
-        <link rel="stylesheet" type="text/css" media="screen"
-              href="${app_css_url}"/>
-        <title>${contactListLabel}</title>
-    </head>
-    <body>
-    <div>
+    <spring:message code="label_contact_list" var="labelContactList"/>
+    <spring:message code="label_contact_first_name" var="labelContactFirstName"/>
+    <spring:message code="label_contact_last_name" var="labelContactLastName"/>
+    <spring:message code="label_contact_birth_date" var="labelContactBirthDate"/>
+    <spring:url value="/contacts/" var="showContactUrl"/>
 
-        <h1>${contactListLabel}</h1>
-        <c:if test="${not empty contacts}">
-            <table border="1">
-                <thead>
+    <h2>${labelContactList}</h2>
+
+    <c:if test ="${not empty contacts}">
+        <table border="1">
+            <thead>
+            <tr>
+                <th>${labelContactFirstName}</th>
+                <th>${labelContactLastName}</th>
+                <th>${labelContactBirthDate}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach items = "${contacts}" var="contact">
                 <tr>
-                    <th>${firstName}</th>
-                    <th>${lastName}</th>
-                    <th>${birthDate}</th>
+                    <td>${contact.firstName}</td>
+                    <td>${contact.lastName}</td>
+                    <td><joda:format value = "${contact.birthDate}"
+                                     pattern = "yyyy-MM-dd"/></td>
                 </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${contacts}" var="contact">
-                    <tr>
-                        <td>${contact.firstName}</td>
-                        <td>${contact.lastName}</td>
-                        <td><joda:format value="${contact.birthDate}"
-                                         pattern="${dateFormat}"/></td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </c:if>
-    </div>
-    </body>
-    </html>
-</jsp:root>
+            </c:forEach>
+            </tbody>
+        </table>
+    </c:if>
+</div>
