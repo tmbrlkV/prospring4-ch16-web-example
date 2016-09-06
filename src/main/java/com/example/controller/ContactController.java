@@ -6,6 +6,7 @@ import com.example.entity.Message;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -116,6 +117,7 @@ public class ContactController {
         return contact.getPhoto();
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @RequestMapping(params = "form", method = RequestMethod.GET)
     public String createForm(Model uiModel) {
         Contact contact = new Contact();
