@@ -24,7 +24,7 @@
 
     <div id="contactUpdate">
         <form:form modelAttribute="contact" action="${contacts_url}/${contact.id}?form" id="contactUpdateForm"
-                   method="post">
+                   method="post" enctype="multipart/form-data">
 
             <c:if test="${not empty message}">
                 <div id="message" class="${message.type}">${message.message}</div>

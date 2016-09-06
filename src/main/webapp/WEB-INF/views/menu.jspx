@@ -13,4 +13,5 @@
     <spring:url var="loginUrl" value="/j_spring_security_check"/>
 
     <h3>${menuHeaderText}</h3>
+    <a href="${addContactUrl}"><h3>${menuAddContact}</h3></a>
 </div>

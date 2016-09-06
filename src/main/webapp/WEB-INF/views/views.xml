@@ -8,7 +8,10 @@
     <definition extends="default" name="show">
         <put-attribute name="body" value="/WEB-INF/views/show.jspx"/>
     </definition>
-    <definition extends="default" name="contacts/update">
+    <definition extends="default" name="update">
+        <put-attribute name="body" value="/WEB-INF/views/edit.jspx" />
+    </definition>
+    <definition extends="default" name="create">
         <put-attribute name="body" value="/WEB-INF/views/edit.jspx" />
     </definition>
 </tiles-definitions>

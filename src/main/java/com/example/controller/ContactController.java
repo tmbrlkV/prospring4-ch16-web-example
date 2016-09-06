@@ -3,19 +3,19 @@ package com.example.controller;
 import com.example.dao.ContactService;
 import com.example.entity.Contact;
 import com.example.entity.Message;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -52,23 +52,75 @@ public class ContactController {
     @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.POST)
     public String update(@Valid Contact contact, BindingResult bindingResult,
                          Model uiModel, RedirectAttributes redirectAttributes,
-                         @PathVariable Long id, Locale locale) {
+                         Locale locale, @RequestParam(value = "file", required = false) Part file) {
         if (bindingResult.hasErrors()) {
             uiModel.addAttribute("message", new Message("error",
                     messageSource.getMessage("contact_save_fail", new Object[]{}, locale)));
             uiModel.addAttribute("contact", contact);
-            return "contacts/update";
+            return "update";
         }
         uiModel.asMap().clear();
         redirectAttributes.addFlashAttribute("message", new Message("success",
                 messageSource.getMessage("contact_save_success", new Object[]{}, locale)));
+        getFile(contact, file);
         contactService.save(contact);
-        return "redirect:/contacts/" + id;
+        return "redirect:/contacts/" + contact.getId();
+    }
+
+    private void getFile(@Valid Contact contact, @RequestParam(value = "file", required = false) Part file) {
+        if (file != null) {
+            byte[] fileContent = null;
+            try {
+                InputStream inputStream = file.getInputStream();
+
+                fileContent = IOUtils.toByteArray(inputStream);
+                contact.setPhoto(fileContent);
+            } catch (IOException ignored) {
+
+            }
+            contact.setPhoto(fileContent);
+        }
     }
 
     @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.GET)
     public String updateForm(@PathVariable("id") Long id, Model uiModel) {
         uiModel.addAttribute("contact", contactService.findById(id));
-        return "contacts/update";
+        return "update";
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public String create(@Valid Contact contact, BindingResult bindingResult,
+                         Model uiModel, RedirectAttributes redirectAttributes,
+                         Locale locale,
+                         @RequestParam(value = "file", required = false) Part file) {
+        if (bindingResult.hasErrors()) {
+            uiModel.addAttribute("message", new Message("error",
+                    messageSource.getMessage("contact_save_fail", new Object[]{}, locale)));
+            uiModel.addAttribute("contact", contact);
+            return "create";
+        }
+        uiModel.asMap().clear();
+        redirectAttributes.addFlashAttribute("message", new Message("success",
+                messageSource.getMessage("contact_save_success", new Object[]{}, locale)));
+
+        getFile(contact, file);
+
+        contactService.save(contact);
+        return "redirect:/contacts/";
+    }
+
+    @RequestMapping(value = "/photo/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public byte[] downloadPhoto(@PathVariable("id") Long id) {
+        Contact contact = contactService.findById(id);
+        return contact.getPhoto();
+    }
+
+    @RequestMapping(params = "form", method = RequestMethod.GET)
+    public String createForm(Model uiModel) {
+        Contact contact = new Contact();
+        uiModel.addAttribute("contact", contact);
+
+        return "create";
     }
 }
